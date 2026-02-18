@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Мы знакомы:</title>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f8e8ef;
+        background-image: url("data:image/svg+xml,\
+<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
+<path fill='%23f3c6d3' d='M30 50s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
+<path fill='%23d62839' d='M90 40s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
+<path fill='%23ffffff' d='M60 95s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
+</svg>");
+        background-size: 120px 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #6b3e4e;
+        text-align: center;
+    }
+
+    .container {
+        background: rgba(255,255,255,0.85);
+        padding: 30px;
+        border-radius: 25px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 12px 35px rgba(200, 150, 170, 0.35);
+        backdrop-filter: blur(6px);
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-weight: 500;
+        margin-bottom: 15px;
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        margin-top: 20px;
+        font-weight: 400;
+        font-size: 1.2rem;
+    }
+
+    .time {
+        font-size: 1rem;
+        margin: 3px 0;
+    }
+
+    .big {
+        font-size: 1.3rem;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+
+    /* Адаптивность для мобильных */
+    @media (max-width: 480px) {
+        .container {
+            padding: 20px;
+            width: 95%;
+        }
+        h1 {
+            font-size: 1.4rem;
+        }
+        h2 {
+            font-size: 1.1rem;
+        }
+        .time {
+            font-size: 0.9rem;
+        }
+        .big {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+<img src="https://lh3.googleusercontent.com/pw/AP1GczPJ7502wjs0YGRhUNps_H7JB44NMBabjCZBd_sgOdIIvxoZRI0h8m_MRkJVz12ohB6Xc-6olFRT4CBVHwIxpuFdGD1nVj7qysMf-HG594C1srfDUV-FPXvHUUC0PRRevETOP5wQxRlt601LK7bjBprO=w1461-h974-s-no-gm?authuser=0" alt="Фото" style="width:100%; max-width:300px; border-radius:20px; margin-bottom:20px;">
+
+    <h1>Мы знакомы (С 3 июня 2024 15:00):</h1>
+
+    <div class="time" id="years"></div>
+    <div class="time" id="months"></div>
+    <div class="time" id="days"></div>
+    <div class="time" id="hours"></div>
+    <div class="time" id="minutes"></div>
+    <div class="time" id="seconds"></div>
+
+    <h2>Всего:</h2>
+    <div class="big" id="calendar"></div>
+</div>
+
+<script>
+const startDate = new Date(2024, 5, 3, 15, 0, 0);
+
+const MS_IN_SECOND = 1000;
+const MS_IN_MINUTE = MS_IN_SECOND * 60;
+const MS_IN_HOUR = MS_IN_MINUTE * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
+const MS_IN_YEAR = MS_IN_DAY * 365.2425;
+const MS_IN_MONTH = MS_IN_YEAR / 12;
+
+function getCalendarDiff(from, to) {
+    let years = to.getFullYear() - from.getFullYear();
+    let months = to.getMonth() - from.getMonth();
+    let days = to.getDate() - from.getDate();
+    let hours = to.getHours() - from.getHours();
+    let minutes = to.getMinutes() - from.getMinutes();
+    let seconds = to.getSeconds() - from.getSeconds();
+
+    if (seconds < 0) { seconds += 60; minutes--; }
+    if (minutes < 0) { minutes += 60; hours--; }
+    if (hours < 0) { hours += 24; days--; }
+
+    if (days < 0) {
+        const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0);
+        days += prevMonth.getDate();
+        months--;
+    }
+
+    if (months < 0) {
+        months += 12;
+        years--;
+    }
+
+    return { years, months, days, hours, minutes, seconds };
+}
+
+function plural(n, one, few, many) {
+    n = Math.abs(n) % 100;
+    let n1 = n % 10;
+    if (n > 10 && n < 20) return many;
+    if (n1 > 1 && n1 < 5) return few;
+    if (n1 == 1) return one;
+    return many;
+}
+
+function update() {
+    const now = new Date();
+    const diffMs = now - startDate;
+
+    document.getElementById("years").innerText =
+        "Лет: " + (diffMs / MS_IN_YEAR).toFixed(2);
+    document.getElementById("months").innerText =
+        "Месяцев: " + (diffMs / MS_IN_MONTH).toFixed(2);
+    document.getElementById("days").innerText =
+        "Дней: " + (diffMs / MS_IN_DAY).toFixed(2);
+    document.getElementById("hours").innerText =
+        "Часов: " + (diffMs / MS_IN_HOUR).toFixed(2);
+    document.getElementById("minutes").innerText =
+        "Минут: " + (diffMs / MS_IN_MINUTE).toFixed(2);
+    document.getElementById("seconds").innerText =
+        "Секунд: " + (diffMs / MS_IN_SECOND).toFixed(2);
+
+    const d = getCalendarDiff(startDate, now);
+
+    const text =
+        `${d.years} ${plural(d.years,"год","года","лет")} ` +
+        `${d.months} ${plural(d.months,"месяц","месяца","месяцев")} ` +
+        `${d.days} ${plural(d.days,"день","дня","дней")} ` +
+        `${d.hours} ${plural(d.hours,"час","часа","часов")} ` +
+        `${d.minutes} ${plural(d.minutes,"минута","минуты","минут")} ` +
+        `${d.seconds} ${plural(d.seconds,"секунда","секунды","секунд")}`;
+
+    document.getElementById("calendar").innerText = text;
+}
+
+setInterval(update, 100);
+update();
+</script>
+
+</body>
+</html>
