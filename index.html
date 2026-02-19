@@ -3,179 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <title>Мы знакомы:</title>
-
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f8e8ef;
-        background-image: url("data:image/svg+xml,\
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8e8ef;
+    background-image: url("data:image/svg+xml,\
 <svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
 <path fill='%23f3c6d3' d='M30 50s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
 <path fill='%23d62839' d='M90 40s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
 <path fill='%23ffffff' d='M60 95s-10-8-15-15c-6-8 2-18 10-10l5 5 5-5c8-8 16 2 10 10-5 7-15 15-15 15z'/>\
 </svg>");
-        background-size: 120px 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        color: #6b3e4e;
-        text-align: center;
-    }
+    background-size: 120px 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #6b3e4e;
+    text-align: center;
+    flex-direction: column;
+}
 
-    .container {
-        background: rgba(255,255,255,0.85);
-        padding: 30px;
-        border-radius: 25px;
-        width: 90%;
-        max-width: 600px;
-        box-shadow: 0 12px 35px rgba(200, 150, 170, 0.35);
-        backdrop-filter: blur(6px);
-        box-sizing: border-box;
-    }
+.container {
+    background: rgba(255,255,255,0.85);
+    padding: 30px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 12px 35px rgba(200, 150, 170, 0.35);
+    backdrop-filter: blur(6px);
+    box-sizing: border-box;
+}
 
-    h1 {
-        font-weight: 500;
-        margin-bottom: 15px;
-        font-size: 1.6rem;
-    }
+/* Слайдер */
+#sliderOverlay, #galleryOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    flex-direction: column;
+}
 
-    h2 {
-        margin-top: 20px;
-        font-weight: 400;
-        font-size: 1.2rem;
-    }
+#sliderOverlay.active, #galleryOverlay.active { opacity: 1; pointer-events: auto; }
 
-    .time {
-        font-size: 1rem;
-        margin: 3px 0;
-    }
+#slider { max-width: 95vw; max-height: 80vh; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); object-fit: contain; cursor: pointer; margin-bottom: 15px; }
 
-    .big {
-        font-size: 1.3rem;
-        margin-top: 10px;
-        font-weight: 500;
-    }
+#galleryOverlay { flex-wrap: wrap; overflow-y: auto; padding: 20px; justify-content: center; }
+.thumbnail { width: 100px; height: 100px; object-fit: cover; margin: 5px; cursor: pointer; border-radius:10px; transition: transform 0.2s; }
+.thumbnail:hover { transform: scale(1.1); }
 
-    /* Адаптивность для мобильных */
-    @media (max-width: 480px) {
-        .container {
-            padding: 20px;
-            width: 95%;
-        }
-        h1 {
-            font-size: 1.4rem;
-        }
-        h2 {
-            font-size: 1.1rem;
-        }
-        .time {
-            font-size: 0.9rem;
-        }
-        .big {
-            font-size: 1.1rem;
-        }
-    }
+/* Кнопки */
+button { padding: 10px 20px; font-size: 1em; border-radius: 10px; border: none; cursor: pointer; }
+#surpriseBtn { margin-top: 20px; background-color: #d62839; color: white; }
+#surpriseBtn:hover { background-color: #f03b57; }
+#galleryBtn { background-color: #6b3e4e; color: white; margin-top:10px; }
+#galleryBtn:hover { background-color: #874f66; }
+
 </style>
 </head>
 <body>
 
 <div class="container">
-<img src="https://lh3.googleusercontent.com/pw/AP1GczPJ7502wjs0YGRhUNps_H7JB44NMBabjCZBd_sgOdIIvxoZRI0h8m_MRkJVz12ohB6Xc-6olFRT4CBVHwIxpuFdGD1nVj7qysMf-HG594C1srfDUV-FPXvHUUC0PRRevETOP5wQxRlt601LK7bjBprO=w1461-h974-s-no-gm?authuser=0" alt="Фото" style="width:100%; max-width:300px; border-radius:20px; margin-bottom:20px;">
+<img src="https://lh3.googleusercontent.com/pw/AP1GczPJ7502wjs0YGRhUNps_H7JB44NMBabjCZBd_sgOdIIvxoZRI0h8m_MRkJVz12ohB6Xc-6olFRT4CBVHwIxpuFdGD1nVj7qysMf-HG594C1srfDUV-FPXvHUUC0PRRevETOP5wQxRlt601LK7bjBprO=w1461-h974-s-no-gm?authuser=0" 
+     style="width:100%; max-width:300px; border-radius:20px; margin-bottom:20px;">
 
-    <h1>Мы знакомы (С 3 июня 2024 15:00):</h1>
+<h1>Мы знакомы (С 3 июня 2024 15:00):</h1>
 
-    <div class="time" id="years"></div>
-    <div class="time" id="months"></div>
-    <div class="time" id="days"></div>
-    <div class="time" id="hours"></div>
-    <div class="time" id="minutes"></div>
-    <div class="time" id="seconds"></div>
+<!-- Отдельные пункты -->
+<div id="years"></div>
+<div id="months"></div>
+<div id="days"></div>
+<div id="hours"></div>
+<div id="minutes"></div>
+<div id="seconds"></div>
 
-    <h2>Всего:</h2>
-    <div class="big" id="calendar"></div>
+<h2>Всего (календарно):</h2>
+<div id="calendar" style="font-size:1.2em; margin-top:10px;"></div>
+
+<button id="surpriseBtn">Сюрприз</button>
 </div>
 
+<!-- Слайдер -->
+<div id="sliderOverlay">
+    <img id="slider" src="">
+    <button id="galleryBtn">Галерея</button>
+</div>
+
+<!-- Галерея миниатюр -->
+<div id="galleryOverlay"></div>
+
 <script>
+/* ===== ТАЙМЕР ===== */
 const startDate = new Date(2024, 5, 3, 15, 0, 0);
+function updateTimers() {
+    const now = new Date();
+    const diff = now - startDate;
 
-const MS_IN_SECOND = 1000;
-const MS_IN_MINUTE = MS_IN_SECOND * 60;
-const MS_IN_HOUR = MS_IN_MINUTE * 60;
-const MS_IN_DAY = MS_IN_HOUR * 24;
-const MS_IN_YEAR = MS_IN_DAY * 365.2425;
-const MS_IN_MONTH = MS_IN_YEAR / 12;
+    document.getElementById("years").innerText = "Лет: " + (diff / (1000*60*60*24*365.2425)).toFixed(2);
+    document.getElementById("months").innerText = "Месяцев: " + (diff / (1000*60*60*24*30.436)).toFixed(2);
+    document.getElementById("days").innerText = "Дней: " + (diff / (1000*60*60*24)).toFixed(2);
+    document.getElementById("hours").innerText = "Часов: " + (diff / (1000*60*60)).toFixed(2);
+    document.getElementById("minutes").innerText = "Минут: " + (diff / (1000*60)).toFixed(2);
+    document.getElementById("seconds").innerText = "Секунд: " + (diff / 1000).toFixed(2);
 
-function getCalendarDiff(from, to) {
-    let years = to.getFullYear() - from.getFullYear();
-    let months = to.getMonth() - from.getMonth();
-    let days = to.getDate() - from.getDate();
-    let hours = to.getHours() - from.getHours();
-    let minutes = to.getMinutes() - from.getMinutes();
-    let seconds = to.getSeconds() - from.getSeconds();
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+    let hours = now.getHours() - startDate.getHours();
+    let minutes = now.getMinutes() - startDate.getMinutes();
+    let seconds = now.getSeconds() + now.getMilliseconds()/1000 - startDate.getSeconds();
 
     if (seconds < 0) { seconds += 60; minutes--; }
     if (minutes < 0) { minutes += 60; hours--; }
     if (hours < 0) { hours += 24; days--; }
+    if (days < 0) { const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += prevMonth.getDate(); months--; }
+    if (months < 0) { months += 12; years--; }
+    seconds = seconds.toFixed(2);
 
-    if (days < 0) {
-        const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0);
-        days += prevMonth.getDate();
-        months--;
+    document.getElementById("calendar").innerText =
+        `${years} год${years !== 1 ? 'а' : ''} ` +
+        `${months} месяц${months !== 1 ? 'ев' : ''} ` +
+        `${days} день${days !== 1 ? 'ей' : ''} ` +
+        `${hours} час${hours !== 1 ? 'ов' : ''} ` +
+        `${minutes} минут${minutes !== 1 ? 'ы' : ''} ` +
+        `${seconds} секунд`;
+}
+setInterval(updateTimers, 100);
+updateTimers();
+
+/* ===== DROPBOX ИЗОБРАЖЕНИЯ ===== */
+const DROPBOX_TOKEN = "sl.u.AGRps2TsTsGuS4beVBTxRBXNvJm8isuzl-d3uwl63mR7elQW_F5iELM-KLYOz2YkEdmX1_cGkvE0f94f7BH7U6x0m2diQz49a_E7eLScdRAnKXPkDe6FhZJA8YZfYRv7Bf-h_anqRJaK2VDB_OPT8AeiJpwHl0Pcnr_Dj-kpIFg4b9GVpftIfyZBOXLdW9ecERu8UlpLi9ED_vqrdqhR8ysXhFhhrHDCAkxxnohPtbdV2VyDoLMNxURic41hKz-Hd0v3brFjka73dT8qJEIseM5HxOAzIQtyz5YDA-4ow1xAgKhUMJK4wV1lT_1MZweg27fuHv84OJhEI1X-_svPLqORO9wWivZrf70K5sgS4lF0Whdwj85gDWC4TZ0h4pK70WLRn1zbjMHIPnKH5mShKkVHLNlTYcLTv-cIAj541PXTSnyX0bxR6kyEFV6Y2sPiqJrJha6qnOcF0bwYdcsoh3J_eKMYegw11BHqdz14-exf4h0pS5V6Js-WFcDDi0Z53FFc7xrPS9t8KkY5AdipDMAFSLp-jmXSZLoeKWRJ3RTMYWqSNmS-6HL1NxIzSCiO5OkWsQ7AYlhWNx92XENdgY9CCAuC5CEU0RXZGiIYfFhObJA3uw8Z5OX1TMKxQoAJ4YJZ3oRNK2gZCoCI248wZR4C0Zf4z-5ps5xr-2zpPd2e8po7Q4lFAXHcF3tvSom6i1K5MfQim3lBpHsYBaKuLDPhsHwF-skam3EATttvZbu8wc0p7bzVz4LJs1NFgt9B5i1GrSSsWnaWoUtFA1OXOs-zzaFe-Qcy-_LpYry86VZFF-tsnbmCAh359ewvQXbk8s_WdVvI0AsB7qgjX6NRnJ82QqoDQsAdI0Bbjn_6JvSkTTzvOBpq8p9LOv1YAqLrAZ4rmOKCfzQ9t3D-tjI01kxTG2LceNfXp-0HN8pwcvx7lWLFciMKg5npLDVde6tTHZx_qmQeUaAYxdFeQbXQ8HW4XXQkKSya0H12fyOsqu1u2bUPZxt0zJ5XTGL8YhMuuQKcpPRX4z8Wyvmcc6aWBMRvdbCPGD5e7yEMwZjChqOsr9UJl1CHdKKatzvufyDA5uPfQPPxMlabnqD_8Hc5CAQGDGD8qhqLP15A_cOrIB7Ns63W21_ZHW7Q2LDrePedyibF7qsJxQJlxoNo2P_c3sL_-AgRFWfVsL3aMG9mEdT7wNYKhr75wn-6gBtC8QtkF-Y7p1T8bqUhlK19FmmiihCGq4qRm1w0pq5IKcB-RGhIZSmyIYI6VGu5mFkkq9m1UmwI_wQjoDKi8Kt7ksHKh03h0xY2v_dDHtmhmdu2iLmbZx60gakib0WDA_aDvHwLdgHHo1VU62D39fr6POMqP8rs1EMttlX9mhq_slsYGRV1iSnVDOy89jyy_7VsYAo5buOLF5Lr29lHouFmH2p80kqdm_FrTg8lOVIe4J4ksD5IXNZmCr6UMbTTrNUS56qKCQs";
+const FOLDER_PATH = "/🌹Лизонька🌹";
+
+let images = [];
+let index = 0;
+let sliderInterval;
+
+async function loadImages() {
+    const listResponse = await fetch("https://api.dropboxapi.com/2/files/list_folder", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + DROPBOX_TOKEN, "Content-Type": "application/json" },
+        body: JSON.stringify({ path: FOLDER_PATH })
+    });
+
+    let listData = await listResponse.json();
+    let files = listData.entries.filter(e => e[".tag"] === "file");
+    files = files.sort(() => Math.random() - 0.5); // случайный порядок один раз
+
+    for (let file of files) {
+        const linkResponse = await fetch("https://api.dropboxapi.com/2/files/get_temporary_link", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + DROPBOX_TOKEN, "Content-Type": "application/json" },
+            body: JSON.stringify({ path: file.path_lower })
+        });
+        const linkData = await linkResponse.json();
+        images.push(linkData.link);
+
+        const thumb = document.createElement("img");
+        thumb.src = linkData.link;
+        thumb.className = "thumbnail";
+        thumb.onclick = () => { 
+            index = images.indexOf(linkData.link); 
+            document.getElementById("galleryOverlay").classList.remove("active"); 
+            openSlider(); 
+        };
+        document.getElementById("galleryOverlay").appendChild(thumb);
     }
-
-    if (months < 0) {
-        months += 12;
-        years--;
-    }
-
-    return { years, months, days, hours, minutes, seconds };
 }
 
-function plural(n, one, few, many) {
-    n = Math.abs(n) % 100;
-    let n1 = n % 10;
-    if (n > 10 && n < 20) return many;
-    if (n1 > 1 && n1 < 5) return few;
-    if (n1 == 1) return one;
-    return many;
-}
+/* ===== СЛАЙДЕР ===== */
+function startAutoSlide() { sliderInterval = setInterval(() => nextSlide(), 5000); }
+function resetAutoSlide() { clearInterval(sliderInterval); startAutoSlide(); }
+function nextSlide() { index = (index + 1) % images.length; document.getElementById("slider").src = images[index]; }
+function prevSlide() { index = (index - 1 + images.length) % images.length; document.getElementById("slider").src = images[index]; }
+function openSlider() { if (!images.length) return; document.getElementById("sliderOverlay").classList.add("active"); document.getElementById("slider").src = images[index]; startAutoSlide(); }
+function closeSlider() { document.getElementById("sliderOverlay").classList.remove("active"); clearInterval(sliderInterval); }
 
-function update() {
-    const now = new Date();
-    const diffMs = now - startDate;
+/* ===== ГАЛЕРЕЯ ===== */
+document.getElementById("galleryBtn").onclick = () => { document.getElementById("galleryOverlay").classList.add("active"); };
+document.getElementById("galleryOverlay").onclick = (e) => { if (e.target.id === "galleryOverlay") e.currentTarget.classList.remove("active"); };
 
-    document.getElementById("years").innerText =
-        "Лет: " + (diffMs / MS_IN_YEAR).toFixed(2);
-    document.getElementById("months").innerText =
-        "Месяцев: " + (diffMs / MS_IN_MONTH).toFixed(2);
-    document.getElementById("days").innerText =
-        "Дней: " + (diffMs / MS_IN_DAY).toFixed(2);
-    document.getElementById("hours").innerText =
-        "Часов: " + (diffMs / MS_IN_HOUR).toFixed(2);
-    document.getElementById("minutes").innerText =
-        "Минут: " + (diffMs / MS_IN_MINUTE).toFixed(2);
-    document.getElementById("seconds").innerText =
-        "Секунд: " + (diffMs / MS_IN_SECOND).toFixed(2);
+/* ===== СЮРПРИЗ ===== */
+document.getElementById("surpriseBtn").onclick = () => { 
+    if (images.length === 0) return; 
+    index = Math.floor(Math.random() * images.length); 
+    openSlider(); 
+};
 
-    const d = getCalendarDiff(startDate, now);
+/* ===== КЛИК ПО СЛАЙДЕРУ ===== */
+document.getElementById("sliderOverlay").onclick = (e) => {
+    const width = window.innerWidth;
+    if (e.target.id === "slider") { 
+        if (e.clientX > width/2) nextSlide(); else prevSlide(); 
+        resetAutoSlide(); 
+    } else if (e.target.id !== "galleryBtn") closeSlider();
+};
 
-    const text =
-        `${d.years} ${plural(d.years,"год","года","лет")} ` +
-        `${d.months} ${plural(d.months,"месяц","месяца","месяцев")} ` +
-        `${d.days} ${plural(d.days,"день","дня","дней")} ` +
-        `${d.hours} ${plural(d.hours,"час","часа","часов")} ` +
-        `${d.minutes} ${plural(d.minutes,"минута","минуты","минут")} ` +
-        `${d.seconds} ${plural(d.seconds,"секунда","секунды","секунд")}`;
-
-    document.getElementById("calendar").innerText = text;
-}
-
-setInterval(update, 100);
-update();
+loadImages();
 </script>
 
 </body>
